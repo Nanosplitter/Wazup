@@ -45,6 +45,13 @@ body, html, .App, #root, .outer {
   box-shadow: none;
 }
 
+.outer .centerItem {
+  text-align: center;
+  margin: 0;
+  line-height: 1;
+  padding-bottom: 20px;
+}
+
 .outer h3 {
   text-align: center;
   margin: 0;

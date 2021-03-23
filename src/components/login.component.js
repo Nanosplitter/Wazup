@@ -3,18 +3,18 @@ import React, { Component } from "react";
 export default class Login extends Component {
     render() {
         return (
-            <form>
+            <form id="loginform">
 
                 <h3>Log in</h3>
 
                 <div className="form-group">
-                    <label>Email</label>
-                    <input type="email" className="form-control" placeholder="Enter email" />
+                    <label>Username</label>
+                    <input type="text" name="username" className="form-control" placeholder="Enter username" />
                 </div>
 
                 <div className="form-group">
                     <label>Password</label>
-                    <input type="password" className="form-control" placeholder="Enter password" />
+                    <input type="password" name="password" className="form-control" placeholder="Enter password" />
                 </div>
 
                 <div className="form-group">
@@ -26,7 +26,7 @@ export default class Login extends Component {
 
                 <button type="submit" className="btn btn-dark btn-lg btn-block">Sign in</button>
                 <p className="forgot-password text-right">
-                    Forgot <a href="#">password?</a>
+                    Don't have <a href="/sign-up">an account yet?</a>
                 </p>
             </form>
         );
