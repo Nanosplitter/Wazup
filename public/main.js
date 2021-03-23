@@ -1,5 +1,6 @@
 var userIdPerm = -1;
-
+var convoHtml = "";
+var convoSliders = "";
 $(document).ready(async function () {
 
     //Process for login
@@ -14,6 +15,10 @@ function getUserIdPerm() {
     return userIdPerm;
 }
 
+function getConvoHtml() {
+    return convoHtml;
+}
+
 async function loginHandler(e) {
     $.ajax({ // make an AJAX request
         method: "POST",
@@ -25,35 +30,47 @@ async function loginHandler(e) {
         success: async function (data) {
             // show the data you got from B in result div
 
-            var convoHtml = "";
+            convoHtml = "";
 
             var userId = await getUserId(data.data.username);
             userIdPerm = userId;
             var userConvos = await getConversations(userId);
-            userConvos.forEach(async function(convo) {
-                var messages = await getMessagesForConversation(convo.id);
-                console.log(messages);
-                var lastMessage = messages[0];
+            var loop = new Promise(resolve => {
+                userConvos.forEach(async function(convo, index, array) {
+                    var messages = await getMessagesForConversation(convo.id);
+                    console.log(messages);
+                    var lastMessage = messages[0];
 
-                var friendId = getOtherUser(lastMessage, userId);
-                console.log(friendId);
-                var friendName = await getName(friendId);
-                friendName = friendName[0].name;
-                var convoSlider = "<a className='convoSlide'><h3>"+ friendName +"</h3><p>"+ lastMessage.message +"</p></a>";
-                console.log(convoSlider);
+                    var friendId = getOtherUser(lastMessage, userId);
+                    console.log(friendId);
+                    var friendName = await getName(friendId);
+                    friendName = friendName[0].name;
+                    var convoSlider = "<a className='convoSlide'><h3>"+ friendName +"</h3><p>"+ lastMessage.message +"</p></a>";
+                    console.log(convoSlider);
 
-                
-                convoHtml += convoSlider;
+                    
+                    convoHtml += convoSlider;
 
+                    if (index === array.length - 1) {
+                        resolve();
+                    }
 
-
-
+                });
             });
-            if (data.success === "Success") {
-                window.convoSlider = convoHtml;
-                window.location.pathname = '/convos';
-                // window.convoComponent.test();
-            }
+
+            loop.then(() => {
+                console.log(data);
+                if (data.success === "Success") {
+                    console.log(convoHtml);
+                    localStorage["convoSliders"] = convoHtml;
+                    window.convoSliders = convoHtml;
+                    console.log(window.convoSliders);
+                    window.location.pathname = '/convos';
+                    // window.convoComponent.test();
+                }
+            });
+            
+            
             
             // var userConvos = getConver   sations(userId);
 

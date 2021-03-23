@@ -11,7 +11,8 @@ export default class Convos extends Component {
     }
 
     componentDidMount() {
-        var convoSliders = window.convoSliders;
+        var convoSliders = localStorage["convoSliders"];
+        console.log(convoSliders);
         document.getElementById("convosTab").innerHTML = convoSliders;
     }
 }
