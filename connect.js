@@ -133,7 +133,7 @@ async function addMessage(conversationId, message, sender, reciever) {
 }
 
 async function getMessagesForConversation(conversationId) {
-    var sql = "SELECT * FROM messages WHERE conversationId=? ORDER BY time DESC";
+    var sql = "SELECT * FROM messages WHERE conversationId=? ORDER BY timestamp DESC";
     return await dbQuery(sql, [conversationId.toString()]);
 }
 
@@ -178,11 +178,7 @@ app.get('/', function (req, res){
 
 //LOGIN
 app.post('/login', async function (req, res) {
-    console.log(req.body);
-    console.log(req.body.username);
-    console.log(req.body.password);
     var loginCheck = await checkLogin(req.body.username, req.body.password);
-    
     res.header("Access-Control-Allow-Origin", "*");
     if (loginCheck[0].success > 0) {
         res.status(200).send({success: "Success", data: {username: req.body.username}});
@@ -193,56 +189,38 @@ app.post('/login', async function (req, res) {
 
 //SIGN UP
 app.post('/signup', async function (req, res) {
-    console.log(req.body);
-    console.log(req.body.username);
-    console.log(req.body.password);
     var addUserVar = await addUser(req.body.name, req.body.username, req.body.password);
-    console.log(addUserVar);
     res.header("Access-Control-Allow-Origin", "*");
-    
     res.status(200).send({success: "Success"});
-    
 });
 
 //GET USER ID FROM USERNAME
 app.post('/getUserId', async function (req, res) {
-    console.log("getUserId");
-    console.log(req.body);
     var userId = await getUserId(req.body.username);
-    
     userId = userId[0].id;
-    console.log(userId);
     res.header("Access-Control-Allow-Origin", "*");
-    
     res.status(200).send({success: "Success", data: {userId: userId}});
 });
 
 //GET NAME FROM USER ID
 app.post('/getName', async function (req, res) {
-    console.log(req.body);
-    var name = await getUserId(req.body.userId);
-    console.log(name);
+    var name = await getName(req.body.userId);
     res.header("Access-Control-Allow-Origin", "*");
-    
     res.status(200).send({success: "Success", data: {name: name}});
 });
 
 //GET CONVERSATIONS FROM USER ID
 app.post('/getConversations', async function (req, res) {
-    console.log(req.body);
     var userConvos = await getUserConversations(req.body.userId);
     res.header("Access-Control-Allow-Origin", "*");
-    
     res.status(200).send({success: "Success", data: {userConvos: userConvos}});
     
 });
 
 //GET MESSAGES FROM CONVO ID
 app.post('/getMessagesForConversation', async function (req, res) {
-    console.log(req.body);
     var messages = await getMessagesForConversation(req.body.convoId);
     res.header("Access-Control-Allow-Origin", "*");
-    
     res.status(200).send({success: "Success", data: {messages: messages}});
     
 });

@@ -1,18 +1,20 @@
+var userIdPerm = -1;
 
+$(document).ready(async function () {
 
-$(document).ready(function () {
-    
     //Process for login
     $("#loginform").on('submit', loginHandler);
 
     //Process for sign in
     $("#signupform").on('submit', signupHandler);
 
-
-
 });
 
-function loginHandler(e) {
+function getUserIdPerm() {
+    return userIdPerm;
+}
+
+async function loginHandler(e) {
     $.ajax({ // make an AJAX request
         method: "POST",
         type: "POST",
@@ -20,20 +22,45 @@ function loginHandler(e) {
         dataType: 'json',
         url: "http://localhost:1337/login", // it's the URL of your component B
         data: $("#loginform").serialize(), // serializes the form's elements
-        success: function (data) {
+        success: async function (data) {
             // show the data you got from B in result div
 
+            var convoHtml = "";
+
+            var userId = await getUserId(data.data.username);
+            userIdPerm = userId;
+            var userConvos = await getConversations(userId);
+            userConvos.forEach(async function(convo) {
+                var messages = await getMessagesForConversation(convo.id);
+                console.log(messages);
+                var lastMessage = messages[0];
+
+                var friendId = getOtherUser(lastMessage, userId);
+                console.log(friendId);
+                var friendName = await getName(friendId);
+                friendName = friendName[0].name;
+                var convoSlider = "<a className='convoSlide'><h3>"+ friendName +"</h3><p>"+ lastMessage.message +"</p></a>";
+                console.log(convoSlider);
+
+                
+                convoHtml += convoSlider;
+
+
+
+
+            });
             if (data.success === "Success") {
-                // window.location.pathname = '/convos'
+                window.convoSlider = convoHtml;
+                window.location.pathname = '/convos';
+                // window.convoComponent.test();
             }
-            var userId = getUserId(data.data.username);
-            console.log(userId);
-            // var userConvos = getConversations(userId);
+            
+            // var userConvos = getConver   sations(userId);
 
             // console.log(userConvos);
-            
 
-            var convoSlider = "<a className='convoSlide'><h3>Friend One</h3><p>Some conversation here</p></a>";
+
+            
 
 
         }
@@ -41,7 +68,7 @@ function loginHandler(e) {
     e.preventDefault(); // avoid to execute the actual submit of the form
 }
 
-function signupHandler(e) {
+async function signupHandler(e) {
     $.ajax({ // make an AJAX request
         method: "POST",
         type: "POST",
@@ -59,62 +86,39 @@ function signupHandler(e) {
     e.preventDefault(); // avoid to execute the actual submit of the form
 }
 
-function getUserId(username) {
-    console.log("Get User Id Called");
-    console.log(username);
-    $.ajax({ // make an AJAX request
-        method: "POST",
-        type: "POST",
-        crossDomain: true,
-        dataType: 'json',
-        url: "http://localhost:1337/getUserId", // it's the URL of your component B
-        data: {username: username}, // serializes the form's elements
-        success: function (data) {
-            console.log(data);
-            return data.data.userId;
-        }
-    });
+async function getUserId(username) {
+    var data = await postQuery("getUserId", { username: username });
+    return data.userId;
 }
 
-function getName(userId) {
-    $.ajax({ // make an AJAX request
-        method: "POST",
-        type: "POST",
-        crossDomain: true,
-        dataType: 'json',
-        url: "http://localhost:1337/getName", // it's the URL of your component B
-        data: {userId: userId}, // serializes the form's elements
-        success: function (data) {
-            return data.data.name;
-        }
-    });
+async function getName(userId) {
+    var data = await postQuery("getName", { userId: userId });
+    return data.name;
 }
 
-function getConversations(userId) {
-    $.ajax({ // make an AJAX request
-        method: "POST",
-        type: "POST",
-        crossDomain: true,
-        dataType: 'json',
-        url: "http://localhost:1337/getConversations", // it's the URL of your component B
-        data: {userId: userId}, // serializes the form's elements
-        success: function (data) {
-            return data.data.userConvos;
-        }
-    });
+async function getConversations(userId) {
+    var data = await postQuery("getConversations", { userId: userId });
+    return data.userConvos;
 }
 
-function getMessagesForConversation(convoId) {
-    $.ajax({ // make an AJAX request
-        method: "POST",
-        type: "POST",
-        crossDomain: true,
-        dataType: 'json',
-        url: "http://localhost:1337/getMessagesForConversation", // it's the URL of your component B
-        data: {convoId: convoId}, // serializes the form's elements
-        success: function (data) {
-            return data.data.messages;
-        }
+async function getMessagesForConversation(convoId) {
+    var data = await postQuery("getMessagesForConversation", { convoId: convoId });
+    return data.messages;
+}
+
+async function postQuery(url, data) {
+    return new Promise(resolve => {
+        $.ajax({ // make an AJAX request
+            method: "POST",
+            type: "POST",
+            crossDomain: true,
+            dataType: 'json',
+            url: "http://localhost:1337/" + url, // it's the URL of your component B
+            data: data, // serializes the form's elements
+            success: async function (result) {
+                resolve(result.data);
+            }
+        });
     });
 }
 
