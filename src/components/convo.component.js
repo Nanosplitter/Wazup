@@ -1,9 +1,10 @@
 import React, { Component } from "react";
+import $ from "jquery";
 const qs = require('qs');
 
 export default class Convos extends Component {
 
-    
+
 
     render() {
 
@@ -34,10 +35,41 @@ export default class Convos extends Component {
             } else {
                 document.getElementById("convoTab").innerHTML += "<p>" + message.message + "</p>" + "<br>";
             }
-            
+
         });
+
+        this.interval = setInterval(() => this.updateMessages(), 1000);
         // document.getElementById("convoTab").innerHTML = convoSliders;
     }
 
-    
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
+    updateMessages() {
+        $.ajax({ // make an AJAX request
+            method: "POST",
+            type: "POST",
+            crossDomain: true,
+            dataType: 'json',
+            url: "http://localhost:1337/getMessagesForConversation", // it's the URL of your component B
+            data: { convoId: localStorage["convoId"] }, // serializes the form's elements
+            success: async function (result) {
+                var messages = result.data.messages;
+                messages = messages.reverse();
+                document.getElementById("convoTab").innerHTML = "";
+                messages.forEach(function (message) {
+                    localStorage.setItem("recieverId", message.reciever);
+                    if (message.sender == localStorage.getItem("currentUser")) {
+                        console.log("Sender");
+                        document.getElementById("convoTab").innerHTML += "<p style='text-align:right'>" + message.message + "</p>" + "<br>";
+                    } else {
+                        document.getElementById("convoTab").innerHTML += "<p>" + message.message + "</p>" + "<br>";
+                    }
+
+                });
+            }
+        });
+    }
+
 }
