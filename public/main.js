@@ -9,6 +9,7 @@ $(document).ready(async function () {
     //Process for sign in
     $("#signupform").on('submit', signupHandler);
 
+    $("#addmessageform").on('submit', addMessageHandler);
 });
 
 function getUserIdPerm() {
@@ -31,7 +32,7 @@ async function loginHandler(e) {
             // show the data you got from B in result div
 
             convoHtml = "";
-
+            console.log(data);
             var userId = await getUserId(data.data.username);
             userIdPerm = userId;
             localStorage.setItem("currentUser", userId);
@@ -100,6 +101,46 @@ async function signupHandler(e) {
             if (data.success === "Success") {
                 window.location.pathname = '/login';
             }
+        }
+    });
+    e.preventDefault(); // avoid to execute the actual submit of the form
+}
+
+async function addMessageHandler(e) {
+    //req.body.conversationId, req.body.message, req.body.sender, req.body.reciever
+    var message = $("#message").val();
+    var conversationId = localStorage["convoId"];
+    var sender = localStorage["currentUser"];
+    var reciever = localStorage["recieverId"];
+    var data = {
+        message: message,
+        conversationId: conversationId,
+        sender: sender,
+        reciever: reciever
+    };
+    console.log(data);
+    $.ajax({ // make an AJAX request
+        method: "POST",
+        type: "POST",
+        crossDomain: true,
+        dataType: 'json',
+        url: "http://localhost:1337/addMessage", // it's the URL of your component B
+        data: data, // serializes the form's elements
+        success: async function (d) {
+            $("#message").val("");
+            document.getElementById("convoTab").innerHTML = "";
+            messages = await getMessagesForConversation(conversationId);
+            messages = messages.reverse();
+            messages.forEach(function (message) {
+                localStorage.setItem("recieverId", message.reciever);
+                if (message.sender == sender) {
+                    console.log("Sender");
+                    document.getElementById("convoTab").innerHTML += "<p style='text-align:right'>" + message.message + "</p>" + "<br>";
+                } else {
+                    document.getElementById("convoTab").innerHTML += "<p>" + message.message + "</p>" + "<br>";
+                }
+                
+            });
         }
     });
     e.preventDefault(); // avoid to execute the actual submit of the form

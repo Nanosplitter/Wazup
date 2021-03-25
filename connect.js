@@ -218,6 +218,14 @@ app.post('/getConversations', async function (req, res) {
     
 });
 
+//ADD MESSAGE
+app.post('/addMessage', async function (req, res) {
+    var wait = await addMessage(req.body.conversationId, req.body.message, req.body.sender, req.body.reciever);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.status(200).send({success: "Success", data: {}});
+    
+});
+
 //GET MESSAGES FROM CONVO ID
 app.post('/getMessagesForConversation', async function (req, res) {
     var messages = await getMessagesForConversation(req.body.convoId);
