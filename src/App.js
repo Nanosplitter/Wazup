@@ -6,6 +6,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import Login from "./components/login.component";
 import SignUp from "./components/signup.component";
 import Convos from "./components/convos.component";
+import Convo from "./components/convo.component";
 import blackLogo from './logo.png';
 
 function App() {
@@ -16,7 +17,7 @@ function App() {
           <div className="collapse navbar-collapse" id="navbarTogglerDemo02">
             <ul className="navbar-nav ml-auto">
               <li className="nav-item">
-                <Link className="nav-link" to={"/sign-in"}>Log in</Link>
+                <Link className="nav-link" to={"/login"}>Log in</Link>
               </li>
               <li className="nav-item">
                 <Link className="nav-link" to={"/sign-up"}>Sign up</Link>
@@ -34,6 +35,7 @@ function App() {
             <Route path="/login" component={Login} />
             <Route path="/sign-up" component={SignUp} />
             <Route path="/convos" component={Convos} />
+            <Route path="/convo" component={Convo} />
           </Switch>
         </div>
       </div>

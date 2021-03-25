@@ -34,10 +34,12 @@ async function loginHandler(e) {
 
             var userId = await getUserId(data.data.username);
             userIdPerm = userId;
+            localStorage.setItem("currentUser", userId);
             var userConvos = await getConversations(userId);
             var loop = new Promise(resolve => {
                 userConvos.forEach(async function(convo, index, array) {
                     var messages = await getMessagesForConversation(convo.id);
+                    localStorage.setItem(convo.id, JSON.stringify(messages));
                     console.log(messages);
                     var lastMessage = messages[0];
 
@@ -45,7 +47,7 @@ async function loginHandler(e) {
                     console.log(friendId);
                     var friendName = await getName(friendId);
                     friendName = friendName[0].name;
-                    var convoSlider = "<a className='convoSlide'><h3>"+ friendName +"</h3><p>"+ lastMessage.message +"</p></a>";
+                    var convoSlider = "<a className='convoSlide' href='/convo?convoId="+ convo.id +"'><h3>"+ friendName +"</h3><p>"+ lastMessage.message +"</p></a>";
                     console.log(convoSlider);
 
                     

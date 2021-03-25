@@ -16,69 +16,70 @@ connection.connect(async function (err) {
     } else {
         console.log("Connection successful!");
     }
-//     await dbQuery("DELETE FROM messages", []);
-//     await dbQuery("DELETE FROM users", []);
-//     await dbQuery("DELETE FROM conversations", []);
+    // await dbQuery("DELETE FROM messages", []);
+    // await dbQuery("DELETE FROM users", []);
+    // await dbQuery("DELETE FROM conversations", []);
 
-//     addUser("Colin", "Nanosplitter", "pass321word");
-//     addUser("Joey", "ari_atori", "password!");
-//     addUser("Bill", "sverdlik", "password");
-//     addUser("Casey", "xi", "pass")
+    // addUser("Colin", "Nanosplitter", "pass321word");
+    // addUser("Joey", "ari_atori", "password!");
+    // addUser("Bill", "sverdlik", "password");
+    // addUser("Casey", "xi", "pass")
     
-//     var idColin = await getUserId("Nanosplitter");
-//     idColin = idColin[0].id;
-//     var idJoey = await getUserId("ari_atori");
-//     idJoey = idJoey[0].id;
-//     var idBill = await getUserId("sverdlik");
-//     idBill = idBill[0].id;
-//     var idCasey = await getUserId("xi");
-//     idCasey = idCasey[0].id
+    // var idColin = await getUserId("Nanosplitter");
+    // idColin = idColin[0].id;
+    // var idJoey = await getUserId("ari_atori");
+    // idJoey = idJoey[0].id;
+    // var idBill = await getUserId("sverdlik");
+    // idBill = idBill[0].id;
+    // var idCasey = await getUserId("xi");
+    // idCasey = idCasey[0].id
 
-//     addConversation(idColin, idJoey);
-//     addConversation(idJoey, idBill);
-//     addConversation(idBill, idCasey);
-//     addConversation(idColin, idCasey);
+    // addConversation(idColin, idJoey);
+    // addConversation(idJoey, idBill);
+    // addConversation(idBill, idCasey);
+    // addConversation(idColin, idCasey);
 
-//     var colinJoeyConvo = await getConversaton(idColin, idJoey);
-//     colinJoeyConvo = colinJoeyConvo[0].id
-//     var joeyBillConvo = await getConversaton(idJoey, idBill);
-//     joeyBillConvo = joeyBillConvo[0].id
-//     var billCaseyConvo = await getConversaton(idBill, idCasey);
-//     billCaseyConvo = billCaseyConvo[0].id
-//     var colinCaseyConvo = await getConversaton(idColin, idCasey);
-//     colinCaseyConvo = colinCaseyConvo[0].id
+    // var colinJoeyConvo = await getConversation(idColin, idJoey);
+    // colinJoeyConvo = colinJoeyConvo[0].id
+    // var joeyBillConvo = await getConversation(idJoey, idBill);
+    // joeyBillConvo = joeyBillConvo[0].id
+    // var billCaseyConvo = await getConversation(idBill, idCasey);
+    // billCaseyConvo = billCaseyConvo[0].id
+    // var colinCaseyConvo = await getConversation(idColin, idCasey);
+    // colinCaseyConvo = colinCaseyConvo[0].id
 
-//     addMessage(colinJoeyConvo, "Hello World!", idColin, idJoey);
-//     addMessage(colinJoeyConvo, "How are you", idJoey, idColin);
-//     addMessage(colinJoeyConvo, "I'm good, HBU", idColin, idJoey);
-//     addMessage(colinJoeyConvo, "I am well as well", idJoey, idColin);
-//     addMessage(colinJoeyConvo, "Dude this weather is awesome", idColin, idJoey);
-//     addMessage(colinJoeyConvo, "ikr", idJoey, idColin);
-//     addMessage(colinJoeyConvo, "Goodbye.", idColin, idJoey);
+    // setTimeout(() => {  addMessage(colinJoeyConvo, "Hello World!", idColin, idJoey); console.log("Message sent"); }, 200);
+    
+    // setTimeout(() => {  addMessage(colinJoeyConvo, "How are you", idJoey, idColin); console.log("Message sent"); }, 2000);
+    // setTimeout(() => {  addMessage(colinJoeyConvo, "I'm good, HBU", idColin, idJoey); console.log("Message sent"); }, 3000);
+    // setTimeout(() => {  addMessage(colinJoeyConvo, "I am well as well", idJoey, idColin); console.log("Message sent"); }, 4000);
+    // setTimeout(() => {  addMessage(colinJoeyConvo, "Dude this weather is awesome", idColin, idJoey); console.log("Message sent"); }, 5000);
+    // setTimeout(() => {  addMessage(colinJoeyConvo, "ikr", idJoey, idColin); console.log("Message sent"); }, 6000);
+    // setTimeout(() => {  addMessage(colinJoeyConvo, "Goodbye.", idColin, idJoey); console.log("Message sent"); }, 7000);
 
-//     addMessage(joeyBillConvo, "Hello World!", idJoey, idBill);
-//     addMessage(joeyBillConvo, "How are you", idBill, idJoey);
-//     addMessage(joeyBillConvo, "I'm good, HBU", idJoey, idBill);
-//     addMessage(joeyBillConvo, "I am well as well", idBill, idJoey);
-//     addMessage(joeyBillConvo, "Dude this weather is awesome", idJoey, idBill);
-//     addMessage(joeyBillConvo, "ikr", idBill, idJoey);
-//     addMessage(joeyBillConvo, "Goodbye.", idJoey, idBill);
+    // setTimeout(() => {  addMessage(joeyBillConvo, "Hello World!", idJoey, idBill); console.log("Message sent"); }, 8000);
+    // setTimeout(() => {  addMessage(joeyBillConvo, "How are you", idBill, idJoey); console.log("Message sent"); }, 9000);
+    // setTimeout(() => {  addMessage(joeyBillConvo, "I'm good, HBU", idJoey, idBill); console.log("Message sent"); }, 10000);
+    // setTimeout(() => {  addMessage(joeyBillConvo, "I am well as well", idBill, idJoey); console.log("Message sent"); }, 11000);
+    // setTimeout(() => {  addMessage(joeyBillConvo, "Dude this weather is awesome", idJoey, idBill); console.log("Message sent"); }, 12000);
+    // setTimeout(() => {  addMessage(joeyBillConvo, "ikr", idBill, idJoey); console.log("Message sent"); }, 13000);
+    // setTimeout(() => {  addMessage(joeyBillConvo, "Goodbye.", idJoey, idBill); console.log("Message sent"); }, 14000);
 
-//     addMessage(billCaseyConvo, "Hello World!", idBill, idCasey);
-//     addMessage(billCaseyConvo, "How are you", idCasey, idBill);
-//     addMessage(billCaseyConvo, "I'm good, HBU", idBill, idCasey);
-//     addMessage(billCaseyConvo, "I am well as well", idCasey, idBill);
-//     addMessage(billCaseyConvo, "Dude this weather is awesome", idBill, idCasey);
-//     addMessage(billCaseyConvo, "ikr", idCasey, idBill);
-//     addMessage(billCaseyConvo, "Goodbye.", idBill, idCasey);
+    // setTimeout(() => {  addMessage(billCaseyConvo, "Hello World!", idBill, idCasey); console.log("Message sent"); }, 15000);
+    // setTimeout(() => {  addMessage(billCaseyConvo, "How are you", idCasey, idBill); console.log("Message sent"); }, 16000);
+    // setTimeout(() => {  addMessage(billCaseyConvo, "I'm good, HBU", idBill, idCasey); console.log("Message sent"); }, 17000);
+    // setTimeout(() => {  addMessage(billCaseyConvo, "I am well as well", idCasey, idBill); console.log("Message sent"); }, 18000);
+    // setTimeout(() => {  addMessage(billCaseyConvo, "Dude this weather is awesome", idBill, idCasey); console.log("Message sent"); }, 19000);
+    // setTimeout(() => {  addMessage(billCaseyConvo, "ikr", idCasey, idBill); console.log("Message sent"); }, 20000);
+    // setTimeout(() => {  addMessage(billCaseyConvo, "Goodbye.", idBill, idCasey); console.log("Message sent"); }, 21000);
 
-//     addMessage(colinCaseyConvo, "Hello World!", idColin, idCasey);
-//     addMessage(colinCaseyConvo, "How are you", idCasey, idColin);
-//     addMessage(colinCaseyConvo, "I'm good, HBU", idColin, idCasey);
-//     addMessage(colinCaseyConvo, "I am well as well", idCasey, idColin);
-//     addMessage(colinCaseyConvo, "Dude this weather is awesome", idColin, idCasey);
-//     addMessage(colinCaseyConvo, "ikr", idCasey, idColin);
-//     addMessage(colinCaseyConvo, "Goodbye.", idColin, idCasey);
+    // setTimeout(() => {  addMessage(colinCaseyConvo, "Hello World!", idColin, idCasey); console.log("Message sent"); }, 22000);
+    // setTimeout(() => {  addMessage(colinCaseyConvo, "How are you", idCasey, idColin); console.log("Message sent"); }, 23000);
+    // setTimeout(() => {  addMessage(colinCaseyConvo, "I'm good, HBU", idColin, idCasey); console.log("Message sent"); }, 24000);
+    // setTimeout(() => {  addMessage(colinCaseyConvo, "I am well as well", idCasey, idColin); console.log("Message sent"); }, 25000);
+    // setTimeout(() => {  addMessage(colinCaseyConvo, "Dude this weather is awesome", idColin, idCasey); console.log("Message sent"); }, 26000);
+    // setTimeout(() => {  addMessage(colinCaseyConvo, "ikr", idCasey, idColin); console.log("Message sent");}, 27000);
+    // setTimeout(() => {  addMessage(colinCaseyConvo, "Yeet.", idColin, idCasey); console.log("Done!");}, 28000);
 
 
 //     var colinsContacts = await getUserContacts(idColin);
