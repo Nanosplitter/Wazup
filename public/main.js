@@ -1,5 +1,4 @@
 var userIdPerm = -1;
-var convoHtml = "";
 var convoSliders = "";
 $(document).ready(async function () {
 
@@ -36,62 +35,9 @@ async function loginHandler(e) {
             console.log(data);
             var userId = await getUserId(data.data.username);
             userIdPerm = userId;
-            localStorage.setItem("currentUser", userId);
-            var userConvos = await getConversations(userId);
-            var loop = new Promise(resolve => {
-                if (userConvos.length == 0) {
-                    resolve();
-                }
-                userConvos.forEach(async function(convo, index, array) {
-                    console.log("convo");
-                    var messages = await getMessagesForConversation(convo.id);
-                    localStorage.setItem(convo.id, JSON.stringify(messages));
-                    console.log(messages);
-                    if (messages.length > 0) {
-                        var lastMessage = messages[0];
-
-                        var friendId = getOtherUser(lastMessage, userId);
-                        console.log(friendId);
-                        var friendName = await getName(friendId);
-                        friendName = friendName[0].name;
-                        var convoSlider = "<a className='convoSlide' href='/convo?convoId="+ convo.id +"'><h3 style='text-align:left'>"+ friendName +"</h3><p>"+ lastMessage.message +"</p></a>";
-                    } else {
-                        var friendId;
-                        console.log(convo);
-                        if (convo.user1 === userId) {
-                            friendId = convo.user2;
-                        } else {
-                            friendId = convo.user1;
-                        }
-                        var friendName = await getName(friendId);
-                        friendName = friendName[0].name;
-                        var convoSlider = "<a className='convoSlide' href='/convo?convoId="+ convo.id +"'><h3 style='text-align:left'>"+ friendName +"</h3></a>";
-                    }
-                    
-                    console.log(convoSlider);
-
-                    
-                    convoHtml += convoSlider;
-
-                    if (index === array.length - 1) {
-                        resolve();
-                    }
-
-                });
-            });
-
-            loop.then(() => {
-                console.log(data);
-                if (data.success === "Success") {
-                    console.log(convoHtml);
-                    localStorage["convoSliders"] = convoHtml;
-                    window.convoSliders = convoHtml;
-                    console.log(window.convoSliders);
-                    window.location.pathname = '/convos';
-                    // window.convoComponent.test();
-                }
-            });
-            
+            localStorage.setItem("currentUser", userIdPerm);
+            console.log(userIdPerm);
+            window.location.pathname = "/convos";
             
             
             // var userConvos = getConver   sations(userId);
@@ -187,6 +133,65 @@ async function addMessageHandler(e) {
         }
     });
     e.preventDefault(); // avoid to execute the actual submit of the form
+}
+
+async function getUserConversationHtml(userId) {
+    return new Promise(async ret => {
+        var convoHtml = "";
+        var userConvos = await getConversations(userId);
+        var loop = new Promise(resolve => {
+            if (userConvos.length == 0) {
+                resolve();
+            }
+            userConvos.forEach(async function(convo, index, array) {
+                console.log("convo");
+                var messages = await getMessagesForConversation(convo.id);
+                localStorage.setItem(convo.id, JSON.stringify(messages));
+                console.log(messages);
+                if (messages.length > 0) {
+                    var lastMessage = messages[0];
+
+                    var friendId = getOtherUser(lastMessage, userId);
+                    console.log(lastMessage)
+                    console.log(userId);
+                    console.log(friendId);
+                    var friendName = await getName(friendId);
+                    friendName = friendName[0].name;
+                    var convoSlider = "<a className='convoSlide' href='/convo?convoId="+ convo.id +"'><h3 style='text-align:left'>"+ friendName +"</h3><p>"+ lastMessage.message +"</p></a>";
+                } else {
+                    var friendId;
+                    console.log(convo);
+                    if (convo.user1 === userId) {
+                        friendId = convo.user2;
+                    } else {
+                        friendId = convo.user1;
+                    }
+                    var friendName = await getName(friendId);
+                    friendName = friendName[0].name;
+                    var convoSlider = "<a className='convoSlide' href='/convo?convoId="+ convo.id +"'><h3 style='text-align:left'>"+ friendName +"</h3></a>";
+                }
+                
+                console.log(convoSlider);
+
+                
+                convoHtml += convoSlider;
+
+                if (index === array.length - 1) {
+                    resolve();
+                }
+
+            });
+        });
+
+        loop.then(() => {
+            console.log(convoHtml);
+            localStorage["convoSliders"] = convoHtml;
+            window.convoSliders = convoHtml;
+            console.log(window.convoSliders);
+            ret(convoHtml);
+        });
+    });
+    
 }
 
 async function getUserId(username) {

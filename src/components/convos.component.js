@@ -15,15 +15,22 @@ export default class Convos extends Component {
         );
     }
 
+    componentWillUnmount() {
+        clearInterval(this.interval);
+    }
+
     componentDidMount() {
-        var convoSliders = localStorage["convoSliders"];
-        console.log(convoSliders);
-        document.getElementById("convosTab").innerHTML = convoSliders;
-        // var convosHtml = window.getConversationHtmlById(localStorage["currentUser"]);
-        // console.log(convosHtml);
-        // convosHtml.then(function () {
-        //     var data = localStorage["convoSliders"];
-        //     document.getElementById("convosTab").innerHTML = data;
-        // });
+        // var convoSliders = localStorage["convoSliders"];
+        // console.log(convoSliders);
+        // document.getElementById("convosTab").innerHTML = convoSliders;
+        console.log(localStorage["currentUser"]);
+        this.updateConvos();
+        this.interval = setInterval(() => this.updateConvos(), 3000);
+    }
+
+    updateConvos() {
+        window.getUserConversationHtml(parseInt(localStorage["currentUser"])).then(function(html) {
+            document.getElementById("convosTab").innerHTML = html;
+        });
     }
 }

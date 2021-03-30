@@ -104,7 +104,6 @@ async function getUsername(userId) {
 }
 
 async function getName(userId) {
-    console.log(userId);
     var sql = "SELECT name FROM users WHERE id = ?";
     return await dbQuery(sql, [userId]);
 }
@@ -146,7 +145,7 @@ async function getUserContacts(userId) {
 
 async function getUserConversations(userId) {
     var sql = "SELECT * FROM conversations WHERE user1=? OR user2=?";
-    return await dbQuery(sql, [userId.toString(), userId.toString()]);
+    return await dbQuery(sql, [userId, userId]);
 }
 
 function dbQuery(databaseQuery, values) {
