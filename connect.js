@@ -104,8 +104,9 @@ async function getUsername(userId) {
 }
 
 async function getName(userId) {
+    console.log(userId);
     var sql = "SELECT name FROM users WHERE id = ?";
-    return await dbQuery(sql, [userId.toString()]);
+    return await dbQuery(sql, [userId]);
 }
 
 async function addUser(name, username, password) {
@@ -113,8 +114,8 @@ async function addUser(name, username, password) {
     return await dbQuery(sql, [name.toString(), username.toString(), password.toString()]);
 }
 
-async function getConversation(userId1, userId2) {
-    var sql = "SELECT * FROM conversations WHERE (user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?);";
+async function getConversationId(userId1, userId2) {
+    var sql = "SELECT id FROM conversations WHERE (user1 = ? AND user2 = ?) OR (user1 = ? AND user2 = ?);";
     return await dbQuery(sql, [userId1.toString(), userId2.toString(), userId2.toString(), userId1.toString()]);
 }
 
@@ -144,7 +145,7 @@ async function getUserContacts(userId) {
 }
 
 async function getUserConversations(userId) {
-    var sql = "SELECT id FROM conversations WHERE user1=? OR user2=?";
+    var sql = "SELECT * FROM conversations WHERE user1=? OR user2=?";
     return await dbQuery(sql, [userId.toString(), userId.toString()]);
 }
 
@@ -195,6 +196,13 @@ app.post('/signup', async function (req, res) {
     res.status(200).send({success: "Success"});
 });
 
+//GET CONVO ID
+app.post('/getConversationId', async function (req, res) {
+    var convoId = await getConversationId(req.body.user1, req.body.user2);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.status(200).send({success: "Success", data: {convoId:convoId}});
+});
+
 //GET USER ID FROM USERNAME
 app.post('/getUserId', async function (req, res) {
     var userId = await getUserId(req.body.username);
@@ -221,6 +229,16 @@ app.post('/getConversations', async function (req, res) {
 //ADD MESSAGE
 app.post('/addMessage', async function (req, res) {
     var wait = await addMessage(req.body.conversationId, req.body.message, req.body.sender, req.body.reciever);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.status(200).send({success: "Success", data: {}});
+    
+});
+
+//ADD CONVO
+app.post('/addConvo', async function (req, res) {
+    console.log("adding convo");
+    console.log(req.body);
+    var wait = await addConversation(req.body.user1, req.body.user2);
     res.header("Access-Control-Allow-Origin", "*");
     res.status(200).send({success: "Success", data: {}});
     

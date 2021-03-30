@@ -10,7 +10,7 @@ export default class Convos extends Component {
 
         return (
             <form id="addmessageform">
-                <div id="convoTab">
+                <div id="convoTab" className="convoContents">
 
                 </div>
                 <input name="message" id="message" className="form-control" placeholder="Enter Message"></input>

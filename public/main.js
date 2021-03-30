@@ -10,6 +10,7 @@ $(document).ready(async function () {
     $("#signupform").on('submit', signupHandler);
 
     $("#addmessageform").on('submit', addMessageHandler);
+    $("#newconvoform").on('submit', newConvoFormHandler);
 });
 
 function getUserIdPerm() {
@@ -38,17 +39,35 @@ async function loginHandler(e) {
             localStorage.setItem("currentUser", userId);
             var userConvos = await getConversations(userId);
             var loop = new Promise(resolve => {
+                if (userConvos.length == 0) {
+                    resolve();
+                }
                 userConvos.forEach(async function(convo, index, array) {
+                    console.log("convo");
                     var messages = await getMessagesForConversation(convo.id);
                     localStorage.setItem(convo.id, JSON.stringify(messages));
                     console.log(messages);
-                    var lastMessage = messages[0];
+                    if (messages.length > 0) {
+                        var lastMessage = messages[0];
 
-                    var friendId = getOtherUser(lastMessage, userId);
-                    console.log(friendId);
-                    var friendName = await getName(friendId);
-                    friendName = friendName[0].name;
-                    var convoSlider = "<a className='convoSlide' href='/convo?convoId="+ convo.id +"'><h3>"+ friendName +"</h3><p>"+ lastMessage.message +"</p></a>";
+                        var friendId = getOtherUser(lastMessage, userId);
+                        console.log(friendId);
+                        var friendName = await getName(friendId);
+                        friendName = friendName[0].name;
+                        var convoSlider = "<a className='convoSlide' href='/convo?convoId="+ convo.id +"'><h3 style='text-align:left'>"+ friendName +"</h3><p>"+ lastMessage.message +"</p></a>";
+                    } else {
+                        var friendId;
+                        console.log(convo);
+                        if (convo.user1 === userId) {
+                            friendId = convo.user2;
+                        } else {
+                            friendId = convo.user1;
+                        }
+                        var friendName = await getName(friendId);
+                        friendName = friendName[0].name;
+                        var convoSlider = "<a className='convoSlide' href='/convo?convoId="+ convo.id +"'><h3 style='text-align:left'>"+ friendName +"</h3></a>";
+                    }
+                    
                     console.log(convoSlider);
 
                     
@@ -89,6 +108,7 @@ async function loginHandler(e) {
 }
 
 async function signupHandler(e) {
+    console.log("Signup handler hit");
     $.ajax({ // make an AJAX request
         method: "POST",
         type: "POST",
@@ -98,12 +118,35 @@ async function signupHandler(e) {
         data: $("#signupform").serialize(), // serializes the form's elements
         success: function (data) {
             // show the data you got from B in result div
+            console.log(data);
             if (data.success === "Success") {
                 window.location.pathname = '/login';
             }
         }
     });
     e.preventDefault(); // avoid to execute the actual submit of the form
+}
+
+async function newConvoFormHandler(e) {
+    var user1 = localStorage["currentUser"];
+    var user2 = await getUserId($("#username").val());
+    $.ajax({ // make an AJAX request
+        method: "POST",
+        type: "POST",
+        crossDomain: true,
+        dataType: 'json',
+        url: "http://localhost:1337/addConvo", // it's the URL of your component B
+        data: {user1:user1, user2:user2}, // serializes the form's elements
+        success: async function (data) {
+            // show the data you got from B in result div
+            if (data.success === "Success") {
+                var conversationId = await getConversationId(user1, user2);
+                window.location.pathname = '/convo?convoId=' + conversationId;
+            }
+
+        }
+    });
+    // e.preventDefault(); // avoid to execute the actual submit of the form
 }
 
 async function addMessageHandler(e) {
@@ -151,6 +194,11 @@ async function getUserId(username) {
     return data.userId;
 }
 
+async function addMessage(conversationId, message, sender, reciever) {
+    var data = await postQuery("addMessage", { conversationId: conversationId, message: message, sender: sender, reciever: reciever });
+    return data;
+}
+
 async function getName(userId) {
     var data = await postQuery("getName", { userId: userId });
     return data.name;
@@ -164,6 +212,11 @@ async function getConversations(userId) {
 async function getMessagesForConversation(convoId) {
     var data = await postQuery("getMessagesForConversation", { convoId: convoId });
     return data.messages;
+}
+
+async function getConversationId(user1, user2) {
+    var data = await postQuery("getConversationId", { user1: user1, user2: user2 });
+    return data.convoId;
 }
 
 async function postQuery(url, data) {

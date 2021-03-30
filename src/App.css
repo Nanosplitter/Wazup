@@ -24,6 +24,11 @@
   color: white;
 }
 
+.convoContents {
+  height: 800px;
+  overflow-y: auto;
+}
+
 .App-link {
   color: #61dafb;
 }
