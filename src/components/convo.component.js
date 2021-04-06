@@ -24,20 +24,7 @@ export default class Convos extends Component {
         localStorage.setItem("convoId", convoId);
         var messages = JSON.parse(localStorage[convoId]);
         var currentUser = localStorage.getItem("currentUser");
-        console.log(messages);
-        console.log(currentUser);
-        messages = messages.reverse();
-        messages.forEach(function (message) {
-            localStorage.setItem("recieverId", message.reciever);
-            if (message.sender == currentUser) {
-                console.log("Sender");
-                document.getElementById("convoTab").innerHTML += "<p style='text-align:right'>" + message.message + "</p>" + "<br>";
-            } else {
-                document.getElementById("convoTab").innerHTML += "<p>" + message.message + "</p>" + "<br>";
-            }
-
-        });
-
+        this.updateMessages();
         this.interval = setInterval(() => this.updateMessages(), 1000);
         // document.getElementById("convoTab").innerHTML = convoSliders;
     }
@@ -59,14 +46,16 @@ export default class Convos extends Component {
                 messages = messages.reverse();
                 document.getElementById("convoTab").innerHTML = "";
                 messages.forEach(function (message) {
-                    localStorage.setItem("recieverId", message.reciever);
-                    if (message.sender == localStorage.getItem("currentUser")) {
-                        console.log("Sender");
-                        document.getElementById("convoTab").innerHTML += "<p style='text-align:right'>" + message.message + "</p>" + "<br>";
-                    } else {
-                        document.getElementById("convoTab").innerHTML += "<p>" + message.message + "</p>" + "<br>";
-                    }
-
+                    window.getOtherConvoMember(localStorage["convoId"], localStorage["currentUser"]).then(function (recieverId) {
+                        console.log(recieverId);
+                        localStorage.setItem("recieverId", recieverId);
+                        if (message.sender == localStorage.getItem("currentUser")) {
+                            console.log("Sender");
+                            document.getElementById("convoTab").innerHTML += "<p style='text-align:right'>" + message.message + "</p>" + "<br>";
+                        } else {
+                            document.getElementById("convoTab").innerHTML += "<p>" + message.message + "</p>" + "<br>";
+                        }
+                    });
                 });
             }
         });

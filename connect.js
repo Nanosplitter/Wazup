@@ -233,6 +233,14 @@ app.post('/addMessage', async function (req, res) {
     
 });
 
+//GET CONVO USERS
+app.post('/getConvoUsers', async function (req, res) {
+    var convoUsers = await getConversationUsers(req.body.convoId);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.status(200).send({success: "Success", data: {user1: convoUsers[0].user1, user2: convoUsers[0].user2}});
+    
+});
+
 //ADD CONVO
 app.post('/addConvo', async function (req, res) {
     console.log("adding convo");

@@ -224,6 +224,25 @@ async function getConversationId(user1, user2) {
     return data.convoId;
 }
 
+async function getConversationUsers(convoId) {
+    var data = await postQuery("getConvoUsers", { convoId: convoId });
+    console.log(data);
+    return data;
+}
+
+async function getOtherConvoMember(convoId, userId) {
+    return new Promise(async ret => {
+        var users = await getConversationUsers(convoId);
+        console.log(users);
+        if (users.user1 == userId) {
+            ret(users.user2);
+        } else {
+            ret(users.user1);
+        }
+    });
+    
+}
+
 async function postQuery(url, data) {
     return new Promise(resolve => {
         $.ajax({ // make an AJAX request
