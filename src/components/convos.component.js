@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import blueFace from '../blueFace.png';
 export default class Convos extends Component {
     render() {
         
@@ -20,10 +19,6 @@ export default class Convos extends Component {
     }
 
     componentDidMount() {
-        // var convoSliders = localStorage["convoSliders"];
-        // console.log(convoSliders);
-        // document.getElementById("convosTab").innerHTML = convoSliders;
-        console.log(localStorage["currentUser"]);
         this.updateConvos();
         this.interval = setInterval(() => this.updateConvos(), 3000);
     }

@@ -16,6 +16,9 @@ connection.connect(async function (err) {
     } else {
         console.log("Connection successful!");
     }
+    //CODE TO CLEAR THE DATABASE AND ADD SAMPLE DATA
+
+
     // await dbQuery("DELETE FROM messages", []);
     // await dbQuery("DELETE FROM users", []);
     // await dbQuery("DELETE FROM conversations", []);

@@ -26,28 +26,14 @@ async function loginHandler(e) {
         type: "POST",
         crossDomain: true,
         dataType: 'json',
-        url: "http://localhost:1337/login", // it's the URL of your component B
+        url: "http://localhost:1337/login",
         data: $("#loginform").serialize(), // serializes the form's elements
         success: async function (data) {
-            // show the data you got from B in result div
-
             convoHtml = "";
-            console.log(data);
             var userId = await getUserId(data.data.username);
             userIdPerm = userId;
             localStorage.setItem("currentUser", userIdPerm);
-            console.log(userIdPerm);
             window.location.pathname = "/convos";
-            
-            
-            // var userConvos = getConver   sations(userId);
-
-            // console.log(userConvos);
-
-
-            
-
-
         }
     });
     e.preventDefault(); // avoid to execute the actual submit of the form
@@ -60,11 +46,9 @@ async function signupHandler(e) {
         type: "POST",
         crossDomain: true,
         dataType: 'json',
-        url: "http://localhost:1337/signup", // it's the URL of your component B
+        url: "http://localhost:1337/signup",
         data: $("#signupform").serialize(), // serializes the form's elements
         success: function (data) {
-            // show the data you got from B in result div
-            console.log(data);
             if (data.success === "Success") {
                 window.location.pathname = '/login';
             }
@@ -81,10 +65,9 @@ async function newConvoFormHandler(e) {
         type: "POST",
         crossDomain: true,
         dataType: 'json',
-        url: "http://localhost:1337/addConvo", // it's the URL of your component B
+        url: "http://localhost:1337/addConvo",
         data: {user1:user1, user2:user2}, // serializes the form's elements
         success: async function (data) {
-            // show the data you got from B in result div
             if (data.success === "Success") {
                 var conversationId = await getConversationId(user1, user2);
                 window.location.pathname = '/convo?convoId=' + conversationId;
@@ -113,7 +96,7 @@ async function addMessageHandler(e) {
         type: "POST",
         crossDomain: true,
         dataType: 'json',
-        url: "http://localhost:1337/addMessage", // it's the URL of your component B
+        url: "http://localhost:1337/addMessage",
         data: data, // serializes the form's elements
         success: async function (d) {
             $("#message").val("");
@@ -250,7 +233,7 @@ async function postQuery(url, data) {
             type: "POST",
             crossDomain: true,
             dataType: 'json',
-            url: "http://localhost:1337/" + url, // it's the URL of your component B
+            url: "http://localhost:1337/" + url,
             data: data, // serializes the form's elements
             success: async function (result) {
                 resolve(result.data);
